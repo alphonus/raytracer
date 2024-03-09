@@ -1,0 +1,28 @@
+scene getmindist(scene locscene) {
+    //locscene->rays
+    //std::vector<double> stepssize;
+    for(int i=0; i<(locscene.rays).rows(); i++){
+        double curstep = HUGE_VAL;
+        std::cout << "Get Ray" <<std::endl;
+        Eigen::Matrix3d ray = locscene.rays(i, Eigen::all);
+        //std::cout << "Ray" << ray <<std::endl;
+        //obj check for each ray
+        for(auto obj: locscene.objects) {
+            std::cout << "Get sdf" << std::endl;
+            //std::cout << "Obj" << std::endl;
+            double nstep = obj.sdf(ray);
+            if (nstep< 0.05) { 
+                curstep = 0.0;
+                locscene.screen[i] = obj.color();
+
+                }
+            else if (nstep<curstep) {
+                curstep = nstep;
+            }
+        }
+        Eigen::MatrixXd step = ray / (ray.norm() * curstep);
+        //locscene.rays(i, Eigen::all) = ray + step;
+        
+    }
+    return locscene;
+}
