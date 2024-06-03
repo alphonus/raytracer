@@ -1,0 +1,5 @@
+project('tracer', 'cpp', default_options: 'cpp_std=c++19,c++17')
+cc = meson.get_compiler('cpp')
+sdl = dependency('SDL2') 
+eigen = dependency('eigen3', method : 'pkg-config')
+executable('ray', ['src/main.cpp', 'src/shapes.cpp'], dependencies: [sdl, eigen])
